@@ -5,8 +5,8 @@ session_start();
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel ="stylesheet" href="style.css">
-        <title>Student Registeration</title>
+        <link rel ="stylesheet" href="styleee.css">
+        <title>Student Registeration</title>    
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function ()
@@ -40,6 +40,25 @@ session_start();
                 });
             });
         </script>
+        <script>
+            $(document).ready(function(){
+            $('#username').blur(function()
+            {
+             var username = $(this).val();
+                $.ajax({
+                   url:"checkUser.php",
+                    method:"GET",
+                    data:{user_name:username},
+                    dataType:"text",
+                    success:function(html)
+                    {
+                        $('#availability').html(html);
+                    }
+                });
+                                });
+                              });
+        </script>
+    
     <body>
         <div class="title"><h1>Sign In Form</h1>
         </div>
@@ -47,20 +66,23 @@ session_start();
             <button id="login" class="log">Login</button>
             <button id="signup" class="sign">Signup</button>
             <button id="back" class="bk">Back</button>
-        </div>   
+        </div> 
+     
         <div class ="container">
-            <div class ="left"></div>
+            <div class = "left"></div>
             <div class="right">
 
 <!--             <input type="radio" name="option" id="login" checked="checked" /> <span class="option">Login</span><input type="radio" name="option" id="signup" /><span class="option">Sign up</span>-->
 
                 <div class ="signup">
-                    <form name="signup" method="post" action="dbconnection.php" onsubmit="return validateForm()">
+                    <form name="signup" method="post" action="dbconnection.php" onsubmit="return validateSignup()">
 
                         <p>Username:</p>
-                        <input type="text" name="username" placeholder="Username">
+                        <input type="text" name="username" placeholder="Username" id="username">
+                        <span id="availability"></span>
                         <p>Email:</p>
-                        <input type="text" name="email" placeholder="Email">    
+                        <input type="text" name="email" placeholder="Email">   
+                        <span id="ava"></span>
                         <p>Password:<p>
                             <input type="password" name="password" placeholder="******" minlength="6"> 
                         <p>Confirm Password:<p> 
@@ -69,7 +91,7 @@ session_start();
                     </form>
                 </div>
                 <div class ="login">
-                    <form name ="login" method="post" action="login.php">
+                    <form name ="login" method="post" action="login.php"  onsubmit="return validateLogin()">
                         <p>Username</p>
                         <input type="text" name="username" class="input" id="username" placeholder="Username"/><br/>
                         <p>Password<p>
@@ -80,7 +102,7 @@ session_start();
             </div>
         </div>
         <script>
-            function validateForm() {
+            function validateSignup() {
                 var nameErr = document.forms["signup"]["username"].value;
                 if (nameErr == "") {
                     alert("Please Enter Your UserName");
@@ -106,6 +128,18 @@ session_start();
                     alert("Passwords Do not match");
                     document.forms["signup"]["password"].style.borderColor = "#E34234";
                     document.forms["signup"]["confirmPassword"].style.borderColor = "#E34234";
+                    return false;
+                }
+            }
+            function validateLogin(){
+             var nameErr = document.forms["login"]["username"].value;
+                if (nameErr == "") {
+                    alert("Please Enter Your UserName");
+                    return false;
+                } 
+                var passErr = document.forms["login"]["password"].value;
+                if (passErr == "") {
+                    alert("Please Enter Your Password");
                     return false;
                 }
             }
